@@ -1,14 +1,19 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { decrement, increment, reset } from './store/counter/counter.actions';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { AppState } from './store/app.state';
 import { selectTodos } from './store/todos/todo.selectors';
 import { Todo } from './models/todo';
-import { addTodo } from './store/todos/todo.actions';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { addTodo, deleteTodo, updateTodo } from './store/todos/todo.actions';
+import {
+  FormControl,
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+} from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
@@ -21,8 +26,15 @@ export class AppComponent {
   title = 'todo';
   count$: Observable<number>;
   todos$: Observable<Todo[]>;
-
-  constructor(private store: Store<AppState>) {
+  public mot: string = '';
+  public form: FormGroup;
+  constructor(
+    private store: Store<AppState>,
+    private formBuilder: FormBuilder
+  ) {
+    this.form = this.formBuilder.group({
+      name: [''],
+    });
     this.count$ = store.select('counter');
     // ici je lis une partie de mon state
     this.todos$ = this.store.select(selectTodos);
@@ -35,6 +47,8 @@ export class AppComponent {
     //   console.log('value from selector', value);
     //   return value;
     // });
+
+    this.todos$.pipe();
   }
 
   decrement() {
@@ -47,10 +61,26 @@ export class AppComponent {
     // TODO: Dispatch a reset action
     this.store.dispatch(reset());
   }
-  // créer un form reactive
-  // recuperer la valeur du champ
-  // inserer cette dans le dispatch
+
+  submitForm() {
+    if (this.form.valid) {
+      let inputName = this.form.get('name')?.value;
+      console.log(inputName);
+    }
+  }
+
   addTodo() {
-    this.store.dispatch(addTodo({ content: 'okokokokok' }));
+    // recuperer la valeur du champ
+    let inputName = this.form.get('name')?.value;
+    this.store.dispatch(addTodo({ content: inputName }));
+  }
+
+  deleteTodo(id: any) {
+    this.store.dispatch(deleteTodo({ id: id }));
+  }
+
+  public upDate(id: number, element: string) {
+    console.log('upDate', element);
+    this.store.dispatch(updateTodo({ id: id, content: element }));
   }
 }

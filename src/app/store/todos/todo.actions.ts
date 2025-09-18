@@ -5,12 +5,12 @@ export const addTodo = createAction(
   props<{ content: string }>()
 );
 
-export const removedTodo = createAction(
+export const deleteTodo = createAction(
   '[Todo Page] removeTodo',
   props<{ id: any }>()
 );
 
 export const updateTodo = createAction(
   '[Todo Page] updateTodo',
-  props<{ id: any; content: string }>()
+  props<{ id: any; content: any }>()
 );

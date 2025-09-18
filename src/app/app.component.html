@@ -8,8 +8,16 @@
 <button (click)="reset()">Reset Counter</button>
 
 <h1>Todo</h1>
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <div>
+    <label>Nom</label>
+    <input type="text" id="name" name="sodjodjdjs" formControlName="name" />
+  </div>
+  <button (click)="addTodo()">Envoyer</button>
+</form>
 
-<input type="text" />
-<button (click)="addTodo()">Envoyer</button>
-
-<div>Todo {{ todos$ | async }}</div>
+<li *ngFor="let todo of todos$ | async">
+  <div>{{ todo.title }}</div>
+  <button (click)="deleteTodo(todo.id)">Delete</button>
+  <button (click)="upDate(todo.id, todo.title)">Update</button>
+</li>
