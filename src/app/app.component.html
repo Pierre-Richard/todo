@@ -11,13 +11,14 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()">
   <div>
     <label>Nom</label>
-    <input type="text" id="name" name="sodjodjdjs" formControlName="name" />
+    <input type="text" id="name" name="name" formControlName="name" />
   </div>
-  <button (click)="addTodo()">Envoyer</button>
+  <button>Envoyer</button>
 </form>
 
 <li *ngFor="let todo of todos$ | async">
   <div>{{ todo.title }}</div>
   <button (click)="deleteTodo(todo.id)">Delete</button>
-  <button (click)="upDate(todo.id, todo.title)">Update</button>
+  <button (click)="update(todo.id, todo.title)">Update</button>
+  <button (click)="selectedId(todo.id)">Edit</button>
 </li>

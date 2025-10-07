@@ -26,21 +26,21 @@ export class AppComponent {
   title = 'todo';
   count$: Observable<number>;
   todos$: Observable<Todo[]>;
-  public mot: string = '';
+  public mot: string = 'okkokk';
   public form: FormGroup;
   constructor(
     private store: Store<AppState>,
     private formBuilder: FormBuilder
   ) {
     this.form = this.formBuilder.group({
-      name: [''],
+      name: ['okokokoko'],
     });
     this.count$ = store.select('counter');
     // ici je lis une partie de mon state
     this.todos$ = this.store.select(selectTodos);
   }
 
-  increment() {
+  public increment() {
     // TODO: Dispatch an increment action
     // this.store.dispatch(increment({ msg: 'message ajouté' }));
     // this.count$.subscribe((value) => {
@@ -51,36 +51,47 @@ export class AppComponent {
     this.todos$.pipe();
   }
 
-  decrement() {
+  public decrement() {
     console.log('todo', this.todos$);
     // TODO: Dispatch a decrement action
     this.store.dispatch(decrement());
   }
 
-  reset() {
+  public reset() {
     // TODO: Dispatch a reset action
     this.store.dispatch(reset());
   }
 
-  submitForm() {
+  public submitForm() {
     if (this.form.valid) {
       let inputName = this.form.get('name')?.value;
-      console.log(inputName);
+      this.store.dispatch(addTodo({ content: inputName }));
+      this.form.reset();
     }
   }
 
-  addTodo() {
+  public addTodo() {
     // recuperer la valeur du champ
     let inputName = this.form.get('name')?.value;
-    this.store.dispatch(addTodo({ content: inputName }));
   }
 
-  deleteTodo(id: any) {
+  public deleteTodo(id: any) {
     this.store.dispatch(deleteTodo({ id: id }));
   }
-
-  public upDate(id: number, element: string) {
-    console.log('upDate', element);
+  //commment je fais lorsque je clique sur le button update je recupere
+  public update(id: number, element: string) {
     this.store.dispatch(updateTodo({ id: id, content: element }));
+  }
+  /**
+   *
+   * @param nbr
+   * Cette function doit me retourner l'id de la liste
+   */
+  public selectedId(id: number): Observable<Todo | undefined> {
+    //1 recuperer mon tableau
+    let findId = this.todos$.pipe(map((user) => user.find((u) => u.id === id)));
+    console.log('value', findId);
+
+    return findId;
   }
 }
